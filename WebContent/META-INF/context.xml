@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Context>
+	<Resource
+		maxIdle="5" maxActive="10"
+		factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+		password="bi" username="bi"
+		url="jdbc:oracle:thin:@localhost:1521:KJNUDB"
+		driverClassName="oracle.jdbc.OracleDriver"
+		type="javax.sql.DataSource"
+		auth="Container"
+		name="jdbc/OracleDB" />
+</Context>
