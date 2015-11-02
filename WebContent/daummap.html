@@ -30,13 +30,18 @@
 .placeinfo .title {font-weight: bold; font-size:14px;border-radius: 6px 6px 0 0;margin: -1px -1px 0 -1px;padding:10px; color: #fff;background: #d95050;background: #d95050 url(http://i1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
 .placeinfo .tel {color:#0f7833;}
 .placeinfo .jibun {color:#999;font-size:11px;margin-top:0;}
+
 </style>
 
 </head>
 <body>
-
+<form action="daummap2.html" method = "post" name = "google_s">
+       <p>           
+         <input type="submit" name="find" value="거리계산" />
+       </p>
+     </form>
 <div class="map_wrap">
-    <div id="map" style="width:700px;height:500px;position:relative;overflow:hidden;"></div>
+    <div id="map" style="width:500px;height:500px;position:relative;overflow:hidden;"></div>
     <ul id="category">
         <li id="BK9" data-order="0"> 
             <span class="category_bg bank"></span>
@@ -234,7 +239,8 @@ function displayPlaceInfo (place) {
 
     if (place.newAddress) {
         content += '    <span title="' + place.newAddress + '">' + place.newAddress + '</span>' +
-                    '  <span class="jibun" title="' + place.address + '">(지번 : ' + place.address + ')</span>';
+                    '  <span class="jibun" title="'
+                    + place.address + '">(지번 : ' + place.address + ')</span>';
     }  else {
         content += '    <span title="' + place.address + '">' + place.address + '</span>';
     }                
