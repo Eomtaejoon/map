@@ -51,8 +51,7 @@
 <% String a = request.getParameter("aaaa");
 String b = request.getParameter("bbbb");
 String c = request.getParameter("cccc");
-request.
-setCharacterEncoding("euc-kr");
+request.setCharacterEncoding("euc-kr");
 %>
 <input type="text" name="aaa" id="aaaa" value="<%= a %>"><br>
 <input type="text" name="bbb" id="bbbb" value="<%= b %>"><br>
@@ -94,7 +93,7 @@ setCharacterEncoding("euc-kr");
     </ul>
 </div>
 
-<script type="text/javascript" src="//apis.daum.net/maps/maps3.js?apikey=e1ed9582bd6392c362316ba1da643322&libraries=services"></script>
+<script type="text/javascript" src="//apis.daum.net/maps/maps3.js?apikey=a95dd9327a3a37bad5a59ab83cf0cb5d&libraries=services"></script>
 
 
 <script>
