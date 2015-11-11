@@ -74,7 +74,7 @@
 
 <script>
 // 마커를 클릭했을 때 해당 장소의 상세정보를 보여줄 커스텀오버레이입니다
-var ask = 0;
+
 var placeOverlay = new daum.maps.CustomOverlay({zIndex:1}), 
     contentNode = document.createElement('div'), // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
     markers = [], // 마커를 담을 배열입니다
@@ -135,10 +135,6 @@ function searchPlaces() {
     }
 }
 function smsm(){
-		
-int a;
-
-int b;
 
 
 removeMarker();
@@ -182,8 +178,6 @@ removeMarker();
 	      image : markerImage // 마커 이미지 
 	    });
 
-	    // 마커가 지도 위에 표시되도록 설정합니다
-	    marker.setMap(map);
 	    
 	    // 생성된 마커를 배열에 추가합니다
 	    markers.push(marker);
