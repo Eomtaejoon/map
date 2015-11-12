@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
-    
+        <%@page import="bean.mapBean"%>
+<%@page import="java.util.List"%>
+<% List <mapBean> boardList=(List)session.getAttribute("boardlist1"); 
+request.setCharacterEncoding("euc-kr");
+%>
 <!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
  <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -58,7 +62,7 @@ request.setCharacterEncoding("euc-kr");
 <input type="text" name="ccc" id="cccc" value="<%= c %>"><br>
 
 </div>
-<form action="daummap.html"  name = "google_s">
+<form action="daummap0.jsp"  name = "google_s">
        <p>           
          <input type="submit" name = "back" value="취소" />
        </p>
@@ -89,7 +93,11 @@ request.setCharacterEncoding("euc-kr");
         <li id="CS2" data-order="5"> 
             <span class="category_bg store"></span>
             편의점
-        </li>      
+        </li>
+        <li id="sm2" data-order="6"> 
+            <span class="category_bg store"></span>
+            흡연장
+        </li>         
     </ul>
 </div>
 
@@ -212,11 +220,68 @@ function searchPlaces() {
 
     if (!currCategory) {
         return;
-    }
+    }    if (currCategory === "sm2") {    	
+    	  	smsm();
+    }else{
     
-    ps.categorySearch(currCategory, placesSearchCB, {useMapBounds:true}); 
+    ps.categorySearch(currCategory, placesSearchCB, {useMapBounds:true});
+    }
 }
 
+
+function smsm(){
+	
+
+	removeMarker();
+
+		// 지도에 표시된 마커 객체를 가지고 있을 배열입니다
+		
+	
+<%
+if( boardList != null){ 
+for(int i=0;i<boardList.size();i++){
+	mapBean bean = boardList.get(i);
+	 %> 
+	var latlng = [ 
+ {
+     title: '<%=bean.getTitle()%>', 
+     latlng: new daum.maps.LatLng(<%=bean.getLat()%>, <%=bean.getLng()%>)
+ }
+         
+
+];
+		<%} }%> 
+	        
+ for(var i=0; i<latlng.length; i++){
+		addMarker(latlng[i].latlng,latlng[i].title);
+	  }                
+
+		// 마커를 생성하고 지도위에 표시하는 함수입니다.
+		
+		
+		function addMarker(position, title) {
+		  var imageSrc = "http://i1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+		  var imageSize = new daum.maps.Size(24, 35); 
+		     var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize); 
+		    // 마커를 생성합니다
+		    var marker = new daum.maps.Marker({
+		      position: position,
+		      title : title,
+		      image : markerImage // 마커 이미지 
+		    });
+
+		    // 마커가 지도 위에 표시되도록 설정합니다
+		    marker.setMap(map);		    
+		    // 생성된 마커를 배열에 추가합니다
+		    markers.push(marker);
+		    
+		}
+
+		
+		
+		
+ 	} 
+ 	
 // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
 function placesSearchCB( status, data, pagination ) {
     if (status === daum.maps.services.Status.OK) {
