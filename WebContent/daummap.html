@@ -70,7 +70,8 @@
 </style>
 
 </head>
-<body >
+
+<body onload="main()">
 
 <form action="daummap.jsp" method = "post" name = "google_s">
 	
@@ -135,7 +136,10 @@
 
 
 <script>
-
+function main(){
+	
+	location.href="/Myboard/controller?type=board_list";
+}
 // 마커를 클릭했을 때 해당 장소의 상세정보를 보여줄 커스텀오버레이입니다
 var placeOverlay = new daum.maps.CustomOverlay({zIndex:1}), 
     contentNode = document.createElement('div'), // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
@@ -276,8 +280,8 @@ function searchPlaces() {
 
     if (!currCategory) {
         return;
-    }    if (currCategory === "sm2") {    	    	
-
+    }    if (currCategory === "sm2") {
+    	  	location.href="/Myboard/controller?type=board_list";
         smsm();
     }else{
     
@@ -286,7 +290,7 @@ function searchPlaces() {
 }
 
 function smsm(){
-
+	
 
 	removeMarker();
 
