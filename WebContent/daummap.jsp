@@ -269,7 +269,11 @@ for(int i=0;i<boardList.size();i++){
 		      title : title,
 		      image : markerImage // 마커 이미지 
 		    });
-
+		    (function(marker, place) {
+                daum.maps.event.addListener(marker, 'click', function() {
+                    displayPlaceInfo(place);
+                });
+            })
 		    // 마커가 지도 위에 표시되도록 설정합니다
 		    marker.setMap(map);		    
 		    // 생성된 마커를 배열에 추가합니다

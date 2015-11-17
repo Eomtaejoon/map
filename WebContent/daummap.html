@@ -67,13 +67,28 @@
 #pagination {margin:10px auto;text-align: center;}
 #pagination a {display:inline-block;margin-right:10px;}
 #pagination .on {font-weight: bold; cursor: default;color:#777;}
+
+#container {overflow:hidden;height:300px;position:relative;}
+#mapWrapper {width:100%;height:300px;z-index:1;}
+#rvWrapper {width:50%;height:300px;top:0;right:0;position:absolute;z-index:0;}
+#container.view_roadview #mapWrapper {width: 50%;}
+#roadviewControl {position:absolute;top:5px;left:5px;width:65px;height:24px;padding:2px;z-index: 1;background: #f7f7f7;border-radius: 4px;border: 1px solid #c8c8c8;box-shadow: 0px 1px #888;cursor: pointer;}
+#roadviewControl span {background: url(http://i1.daumcdn.net/localimg/localimages/07/mapapidoc/mapworker.png) no-repeat;  padding-left:23px;height:24px;font-size: 12px;display: inline-block;line-height: 2;font-weight: bold;}
+#roadviewControl.active {background: #ccc;box-shadow: 0px 1px #5F616D;border: 1px solid #7F818A;}
+#roadviewControl.active span {background: url(http://i1.daumcdn.net/localimg/localimages/07/mapapidoc/mapworker_on.png) no-repeat;color: #4C4E57;}
+#close {position: absolute;padding: 4px;top: 5px;left: 5px;cursor: pointer;background: #fff;border-radius: 4px;border: 1px solid #c8c8c8;box-shadow: 0px 1px #888;}
+#close .img {display: block;background: url(http://i1.daumcdn.net/localimg/localimages/07/mapapidoc/rv_close.png) no-repeat;width: 14px;height: 14px;}
 </style>
 
 </head>
 
 <body onload="main()">
-
-<form action="daummap.jsp" method = "post" name = "google_s">
+<div id="container">
+    <div id="rvWrapper">
+        <div id="roadview" style="width:100%;height:100%;"></div> <!-- 로드뷰를 표시할 div 입니다 -->
+        <div id="close" title="로드뷰닫기" onclick="closeRoadview()"><span class="img"></span></div>
+    </div>
+<form method = "post" name = "google_s">
 	
        <p>           
    	  <div id="qqq">
@@ -83,6 +98,15 @@
          <input type="submit" name="find" value="거리계산하기" onclick = "num();" />
        </p>
      </form>
+     <div id="container">
+    <div id="rvWrapper">
+        <div id="roadview" style="width:100%;height:100%;"></div> <!-- 로드뷰를 표시할 div 입니다 -->
+        <div id="close" title="로드뷰닫기" onclick="closeRoadview()"><span class="img"></span></div>
+        
+        
+        
+    </div>
+      <div id="roadviewControl" onclick="setRoadviewRoad()"><span>로드뷰</span></div>
 <div class="map_wrap">
      <div id="map" style="width:500px;height:500px;position:relative;overflow:hidden;"></div>
     <ul id="category">
@@ -118,7 +142,6 @@
 </div>
 <div class="map_serch">
     <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
-
     <div id="menu_wrap" class="bg_white">
         <div class="option">
             <p>
@@ -132,10 +155,12 @@
         <div id="pagination"></div>
     </div>
 </div>
+
 <script type="text/javascript" src="//apis.daum.net/maps/maps3.js?apikey=a95dd9327a3a37bad5a59ab83cf0cb5d&libraries=services"></script>
 
 
 <script>
+
 function main(){
 	
 	location.href="/Myboard/controller?type=board_list";
@@ -169,6 +194,7 @@ if (navigator.geolocation) {
 	
     });
 }
+
 function circlego(lat, lon){
 	
 	var circle = new daum.maps.Circle({

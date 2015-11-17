@@ -78,6 +78,17 @@ request.setCharacterEncoding("euc-kr");
 #pagination {margin:10px auto;text-align: center;}
 #pagination a {display:inline-block;margin-right:10px;}
 #pagination .on {font-weight: bold; cursor: default;color:#777;}
+
+customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
+.customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+
+.customoverlay img {
+max-width: 100% ;
+width: expression(this.width > 70 ? 70: true) ;
+height: auto ;
+}
+.customoverlay .title {display:block;text-align:center;background:#fff;margin-right:0px;padding:10px 15px;font-size:14px;font-weight:bold;}
+
 </style>
 
 </head>
@@ -95,7 +106,7 @@ request.setCharacterEncoding("euc-kr");
        </p>
      </form>
 <div class="map_wrap">
-     <div id="map" style="width:500px;height:500px;position:relative;overflow:hidden;"></div>
+     <div id="map" style="width:800px;height:800px;position:relative;overflow:hidden;"></div>
     <ul id="category">
         <li id="BK9" data-order="0"> 
             <span class="category_bg bank"></span>
@@ -111,7 +122,7 @@ request.setCharacterEncoding("euc-kr");
         </li>  
         <li id="OL7" data-order="3"> 
             <span class="category_bg oil"></span>
-            주유소
+            보건소
         </li>  
         <li id="CE7" data-order="4"> 
             <span class="category_bg cafe"></span>
@@ -179,6 +190,7 @@ if (navigator.geolocation) {
 }
 function circlego(lat, lon){
 	
+	
 	var circle = new daum.maps.Circle({
 	    center : new daum.maps.LatLng(lat, lon),  // 원의 중심좌표 입니다 
 	    radius: 500, // 미터 단위의 원의 반지름입니다 
@@ -226,7 +238,7 @@ function num(){
 	 var latlng = map.getCenter();
 	 var lat1 = latlng.getLat();
 	 var level = map.getLevel();
-	  var lng1 = latlng.getLng();
+	 var lng1 = latlng.getLng();
 	  
 	  var addText1 = document.createElement("input");
 		addText1.setAttribute("type","text");
@@ -320,16 +332,19 @@ for(int i=0;i<boardList.size();i++){
          
 
 ];
-		<%} }%> 
+	
 	        
  for(var i=0; i<latlng.length; i++){
-		addMarker(latlng[i].latlng,latlng[i].title);
+		addMarker(latlng[i].latlng,latlng[i].title,<%=bean.getLat()%>,<%=bean.getLng()%>);
 	  }                
 
 		// 마커를 생성하고 지도위에 표시하는 함수입니다.
+ <%} }%> 
 		
 		
-		function addMarker(position, title) {
+		function addMarker(position, title,a,b) {
+			
+
 		  var imageSrc = "http://i1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 		  var imageSize = new daum.maps.Size(24, 35); 
 		     var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize); 
@@ -337,26 +352,42 @@ for(int i=0;i<boardList.size();i++){
 		    var marker = new daum.maps.Marker({
 		      position: position,
 		      title : title,
-		      image : markerImage // 마커 이미지 
+		      image : markerImage, // 마커 이미지 
+		      clickable: true
 		    });
-
+		
+		    
+                daum.maps.event.addListener(marker, 'click', function() {
+                	
+                	abd(map,position,title,a,b);
+                });
+          
 		    // 마커가 지도 위에 표시되도록 설정합니다
 		    marker.setMap(map);		    
 		    // 생성된 마커를 배열에 추가합니다
 		    markers.push(marker);
-		    
+	
 		}
 
 		
 		
 		
- 	} 
+ 	}  
+function abd(map,position,title,a,b){
+	var content = '<div class="customoverlay">' +
+    ' 	 <img src=tt.jpg >'+
+    '    <span class="title">'+title+ ' <a href="http://www.naver.com" target="_blank"><strong>    태그요</strong></a></span>' +    
+    '</div>' ;
+// 커스텀 오버레이를 생성합니다
  	
-
+    contentNode.innerHTML = content;
+    placeOverlay.setPosition(new daum.maps.LatLng(a,b));
+    placeOverlay.setMap(map); 
+}
 // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
 function placesSearchCB( status, data, pagination ) {
     if (status === daum.maps.services.Status.OK) {
-
+	
         // 정상적으로 검색이 완료됐으면 지도에 마커를 표출합니다
         displayPlaces(data.places);
     } 
@@ -382,7 +413,7 @@ function displayPlaces(places) {
             // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
             (function(marker, place) {
                 daum.maps.event.addListener(marker, 'click', function() {
-                    displayPlaceInfo(place);
+                	displayPlaceInfo(place);
                 });
             })(marker, places[i]);
     }
@@ -556,7 +587,7 @@ function gogo(){
 	        var placePosition = new daum.maps.LatLng(places[i].latitude, places[i].longitude),
 	            marker = addMarker(placePosition, i), 
 	            itemEl = getListItem(i, places[i], marker); // 검색 결과 항목 Element를 생성합니다
-	            circlego(places[i].latitude, places[i].longitude);
+	         
 	        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
 	        // LatLngBounds 객체에 좌표를 추가합니다
 	        bounds.extend(placePosition);
@@ -593,24 +624,7 @@ function gogo(){
 	    // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
 	    map.setBounds(bounds);
 	}
-	function circlego(lat, lon){
-		
-		var circle = new daum.maps.Circle({
-		    center : new daum.maps.LatLng(lat, lon),  // 원의 중심좌표 입니다 
-		    radius: 100, // 미터 단위의 원의 반지름입니다 
-		    strokeWeight: 5, // 선의 두께입니다 
-		    strokeColor: '#75B8FA', // 선의 색깔입니다
-		    strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-		    strokeStyle: 'dashed', // 선의 스타일 입니다
-		    fillColor: '#CFE7FF', // 채우기 색깔입니다
-		    fillOpacity: 0.7  // 채우기 불투명도 입니다   
-		}); 
 
-		// 지도에 원을 표시합니다 
-		circle.setMap(map); 
-
-		
-	}
 	// 검색결과 항목을 Element로 반환하는 함수입니다
 	function getListItem(index, places) {
 
