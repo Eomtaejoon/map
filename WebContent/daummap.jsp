@@ -45,6 +45,16 @@ request.setCharacterEncoding("euc-kr");
 .distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
 .distanceInfo .label {display:inline-block;width:50px;}
 .distanceInfo:after {content:none;}
+customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
+.customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+
+.customoverlay img {
+max-width: 100% ;
+width: expression(this.width > 70 ? 70: true) ;
+height: auto ;
+}
+.customoverlay .title {display:block;text-align:center;background:#fff;margin-right:0px;padding:10px 15px;font-size:14px;font-weight:bold;}
+
 
 </style>
 
@@ -68,32 +78,12 @@ request.setCharacterEncoding("euc-kr");
        </p>
      </form>
 <div class="map_wrap">
-    <div id="map" style="width:500px;height:500px;position:relative;overflow:hidden;"></div>
-    <ul id="category">
-        <li id="BK9" data-order="0"> 
-            <span class="category_bg bank"></span>
-            은행
-        </li>       
-        <li id="MT1" data-order="1"> 
-            <span class="category_bg mart"></span>
-            마트
-        </li>  
+    <div id="map" style="width:800px;height:800px;position:relative;overflow:hidden;"></div>
+    <ul id="category">    
         <li id="PM9" data-order="2"> 
             <span class="category_bg pharmacy"></span>
-            약국
-        </li>  
-        <li id="OL7" data-order="3"> 
-            <span class="category_bg oil"></span>
-            주유소
-        </li>  
-        <li id="CE7" data-order="4"> 
-            <span class="category_bg cafe"></span>
-            카페
-        </li>  
-        <li id="CS2" data-order="5"> 
-            <span class="category_bg store"></span>
-            편의점
-        </li>
+            보건소
+        </li>        
         <li id="sm2" data-order="6"> 
             <span class="category_bg store"></span>
             흡연장
@@ -250,41 +240,53 @@ for(int i=0;i<boardList.size();i++){
          
 
 ];
+	for(var i=0; i<latlng.length; i++){
+		addMarker(latlng[i].latlng,latlng[i].title,<%=bean.getLat()%>,<%=bean.getLng()%>);
+	  }        
 		<%} }%> 
 	        
- for(var i=0; i<latlng.length; i++){
-		addMarker(latlng[i].latlng,latlng[i].title);
-	  }                
+		function addMarker(position, title,a,b) {
+			
 
-		// 마커를 생성하고 지도위에 표시하는 함수입니다.
+			  var imageSrc = "http://i1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+			  var imageSize = new daum.maps.Size(24, 35); 
+			     var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize); 
+			    // 마커를 생성합니다
+			    var marker = new daum.maps.Marker({
+			      position: position,
+			      title : title,
+			      image : markerImage, // 마커 이미지 
+			      clickable: true
+			    });
+			
+			    
+	                daum.maps.event.addListener(marker, 'click', function() {
+	                	
+	                	abd(map,position,title,a,b);
+	                });
+	          
+			    // 마커가 지도 위에 표시되도록 설정합니다
+			    marker.setMap(map);		    
+			    // 생성된 마커를 배열에 추가합니다
+			    markers.push(marker);
 		
-		
-		function addMarker(position, title) {
-		  var imageSrc = "http://i1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-		  var imageSize = new daum.maps.Size(24, 35); 
-		     var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize); 
-		    // 마커를 생성합니다
-		    var marker = new daum.maps.Marker({
-		      position: position,
-		      title : title,
-		      image : markerImage // 마커 이미지 
-		    });
-		    (function(marker, place) {
-                daum.maps.event.addListener(marker, 'click', function() {
-                    displayPlaceInfo(place);
-                });
-            })
-		    // 마커가 지도 위에 표시되도록 설정합니다
-		    marker.setMap(map);		    
-		    // 생성된 마커를 배열에 추가합니다
-		    markers.push(marker);
-		    
-		}
+			}
 
-		
-		
-		
- 	} 
+			
+			
+			
+	 	}  
+	function abd(map,position,title,a,b){
+		var content = '<div class="customoverlay">' +
+	    ' 	 <img src=tt.jpg >'+
+	    '    <span class="title">'+title+ ' <a href="http://www.naver.com" target="_blank"><strong>    태그요</strong></a></span>' +    
+	    '</div>' ;
+	// 커스텀 오버레이를 생성합니다
+	 	
+	    contentNode.innerHTML = content;
+	    placeOverlay.setPosition(new daum.maps.LatLng(a,b));
+	    placeOverlay.setMap(map); 
+	}
  	
 // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
 function placesSearchCB( status, data, pagination ) {

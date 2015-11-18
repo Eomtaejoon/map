@@ -45,7 +45,8 @@ public class boardDAO {
 
 				mapBean tmp = new mapBean();
 
-				tmp.setTitle(rs.getString("Title"));
+				tmp.setTitle(rs.getString("T"
+						+ "itle"));
 				tmp.setLat(rs.getString("Lat"));
 				tmp.setLng(rs.getString("Lng"));
 				
